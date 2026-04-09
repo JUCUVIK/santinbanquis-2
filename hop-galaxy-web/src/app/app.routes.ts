@@ -1,0 +1,31 @@
+import { Routes } from '@angular/router';
+
+export const routes: Routes = [
+  { path: '', loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent) },
+  { path: 'contacto', loadComponent: () => import('./pages/contacto/contacto.component').then(m => m.ContactoComponent) },
+  { path: 'faq', loadComponent: () => import('./pages/faq/faq.component').then(m => m.FaqComponent) },
+  { path: 'aviso-legal', loadComponent: () => import('./pages/aviso-legal/aviso-legal.component').then(m => m.AvisoLegalComponent) },
+  { path: 'promociones', loadComponent: () => import('./pages/promociones/promociones.component').then(m => m.PromocionesComponent) },
+  { path: 'barajas', loadComponent: () => import('./pages/barajas/barajas.component').then(m => m.BarajasComponent) },
+  { path: 'barajas/cumpleanos', loadComponent: () => import('./pages/servicios/cumpleanos/cumpleanos.component').then(m => m.CumpleanosComponent) },
+  { path: 'barajas/excursiones', loadComponent: () => import('./pages/servicios/excursiones/excursiones.component').then(m => m.ExcursionesComponent) },
+  { path: 'barajas/fiesta-privada', loadComponent: () => import('./pages/servicios/fiesta-privada/fiesta-privada.component').then(m => m.FiestaPrivadaComponent) },
+  { path: 'barajas/instalaciones', loadComponent: () => import('./pages/servicios/instalaciones/instalaciones.component').then(m => m.InstalacionesComponent) },
+  { path: 'boadilla', loadComponent: () => import('./pages/boadilla/boadilla.component').then(m => m.BoadillaComponent) },
+  { path: 'boadilla/cumpleanos', loadComponent: () => import('./pages/servicios/cumpleanos/cumpleanos.component').then(m => m.CumpleanosComponent) },
+  { path: 'boadilla/excursiones', loadComponent: () => import('./pages/servicios/excursiones/excursiones.component').then(m => m.ExcursionesComponent) },
+  { path: 'boadilla/fiesta-privada', loadComponent: () => import('./pages/servicios/fiesta-privada/fiesta-privada.component').then(m => m.FiestaPrivadaComponent) },
+  { path: 'boadilla/instalaciones', loadComponent: () => import('./pages/servicios/instalaciones/instalaciones.component').then(m => m.InstalacionesComponent) },
+  { path: 'registro', loadComponent: () => import('./pages/registro/registro.component').then(m => m.RegistroComponent) },
+  { path: 'tarifas', loadComponent: () => import('./pages/tarifas/tarifas.component').then(m => m.TarifasComponent) },
+  { path: 'login', loadComponent: () => import('./pages/login/login.component').then(m => m.LoginComponent) },
+  { path: 'recuperar-password', loadComponent: () => import('./pages/recuperar-password/recuperar-password.component').then(m => m.RecuperarPasswordComponent) },
+  { path: 'cambiar-password', loadComponent: () => import('./pages/cambiar-password/cambiar-password.component').then(m => m.CambiarPasswordComponent) },
+  { path: 'area-cliente', loadComponent: () => import('./pages/area-cliente/area-cliente.component').then(m => m.AreaClienteComponent) },
+  { path: 'reserva', loadComponent: () => import('./pages/reserva/reserva.component').then(m => m.ReservaComponent) },
+  { path: 'compra', loadComponent: () => import('./pages/compra/compra.component').then(m => m.CompraComponent) },
+  { path: 'consentimiento', loadComponent: () => import('./pages/consentimiento/consentimiento.component').then(m => m.ConsentimientoComponent) },
+  { path: 'centro/:id', loadComponent: () => import('./pages/centro/centro.component').then(m => m.CentroComponent) },
+  { path: 'centros', loadComponent: () => import('./pages/centros/centros.component').then(m => m.CentrosComponent) },
+  { path: '**', redirectTo: '' }
+];

@@ -1,0 +1,68 @@
+<div class="detail-wrap">
+  <div class="detail-hero" style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('assets/instalaciones.png') center/cover;">
+    <div class="hero-content">
+      <div class="section-tag">🏟️ Nuestras Zonas</div>
+      <h1>Nuestras Instalaciones</h1>
+      <p>Entra en un universo de salto y diversión</p>
+    </div>
+  </div>
+
+  <div class="detail-content">
+    <div class="back-link">
+      <a (click)="goBack()">← Volver al centro</a>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-text">
+        <h2>Un espacio diseñado para ti</h2>
+        <p>En Saltimbanquis Club contamos con instalaciones de última generación diseñadas para garantizar la máxima diversión y seguridad. Diferentes zonas adaptadas a todas las edades y niveles de experiencia.</p>
+        
+        <div class="features-list">
+          <div class="feature-item">
+            <span class="icon">🟦</span>
+            <div>
+              <h3>Main Court</h3>
+              <p>Nuestra pista principal con decenas de trampolines interconectados para saltar sin parar.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="icon">☁️</span>
+            <div>
+              <h3>Foam Pit</h3>
+              <p>Salta desde nuestras plataformas a una piscina gigante de cubos de espuma suave.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="icon">🏀</span>
+            <div>
+              <h3>Slam Dunk</h3>
+              <p>Canastas de baloncesto sobre trampolines para que hagas los mates más espectaculares.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pricing-sidebar">
+        <div class="card pricing-card">
+          <div class="card-header">
+            <h3>Juego Libre</h3>
+          </div>
+          <div class="card-body">
+            <div class="pack-item">
+              <h4>Tarifa General</h4>
+              <p>Acceso a todas las zonas del parque.</p>
+              <div class="price">10€ <span>/ hora</span></div>
+            </div>
+            <hr>
+            <div class="pack-item">
+              <h4>Tarifa Infantil</h4>
+              <p>Zonas adaptadas para menores de 12 años.</p>
+              <div class="price">8€ <span>/ hora</span></div>
+            </div>
+            <button class="btn-primary btn-cta" [routerLink]="['/tarifas']" style="width:100%; margin-top:1.5rem;">Ver todas las tarifas</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

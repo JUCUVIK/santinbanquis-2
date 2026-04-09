@@ -1,0 +1,40 @@
+<nav>
+    <div class="logo-wrap" routerLink="/">
+        <div class="logo-text">Saltimbanquis club</div>
+    </div>
+
+    <div class="nav-menu" [class.open]="isMenuOpen">
+        <div class="nav-item">
+            <span><a routerLink="/centros" (click)="closeMenu()" style="color: inherit; text-decoration: none;">CENTROS ▾</a></span>
+            <div class="dropdown">
+                <a *ngFor="let c of centros" [routerLink]="['/centro', c._id || c.id]" (click)="closeMenu()">{{ (c.nombre || '').replace('Saltimbanquis club ', '').toUpperCase() }}</a>
+            </div>
+        </div>
+        <div class="nav-item"><a routerLink="/tarifas" (click)="closeMenu()">TARIFAS</a></div>
+
+        <!-- Mostrar "REGISTRO / LOGIN" si no está logueado -->
+        <ng-container *ngIf="!isLoggedIn">
+            <div class="nav-item"><a routerLink="/login" (click)="closeMenu()">LOGIN</a></div>
+            <div class="nav-item"><a routerLink="/registro" (click)="closeMenu()">REGISTRO</a></div>
+        </ng-container>
+
+        <!-- Mostrar "ÁREA CLIENTE" y "CERRAR SESIÓN" si está logueado -->
+        <ng-container *ngIf="isLoggedIn">
+            <div class="nav-item"><a routerLink="/area-cliente" (click)="closeMenu()">ÁREA CLIENTE</a></div>
+            <div class="nav-item"><a style="cursor: pointer;" (click)="logout()">CERRAR SESIÓN</a></div>
+        </ng-container>
+
+        <div class="nav-item">
+            <span>INFORMACIÓN ▾</span>
+            <div class="dropdown">
+                <a routerLink="/contacto" (click)="closeMenu()">CONTACTO</a>
+                <a routerLink="/faq" (click)="closeMenu()">PREGUNTAS</a>
+            </div>
+        </div>
+        <button class="nav-cta" routerLink="/reserva" (click)="onReservaClick()">RESERVA YA</button>
+    </div>
+
+    <div class="hamburger" (click)="toggleMenu()">
+        <span></span><span></span><span></span>
+    </div>
+</nav>

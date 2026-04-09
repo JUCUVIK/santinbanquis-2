@@ -1,0 +1,215 @@
+<div class="tarifas-wrap">
+    <div class="tarifas-header">
+        <div class="section-tag">Tickets</div>
+        <h2>Sistema de Reservas</h2>
+        <p>Selecciona tu centro, la fecha y el tipo de pases que deseas adquirir.</p>
+    </div>
+
+    <!-- Booking Form -->
+    <div class="reg-box" style="margin-top: 2rem;">
+        <div class="reg-grid" style="grid-template-columns: 1fr;">
+            
+            <!-- Nuevo Paso 0: Tipo de Reserva -->
+            <div class="form-group">
+                <label>Paso 1: ¿Qué quieres reservar?</label>
+                <div class="reg-grid grid-3-col" style="gap: 0.8rem; margin-bottom: 1rem;">
+                    <button type="button" class="ttab" [class.active]="bookingData.tipo === 'juego'" (click)="bookingData.tipo = 'juego'; bookingData.pack = 'individual'" style="font-size: 0.8rem; padding: 0.8rem;">JUEGO LIBRE</button>
+                    <button type="button" class="ttab" [class.active]="bookingData.tipo === 'cumple'" (click)="bookingData.tipo = 'cumple'; bookingData.pack = 'basico'" style="font-size: 0.8rem; padding: 0.8rem;">CUMPLEAÑOS</button>
+                    <button type="button" class="ttab" [class.active]="bookingData.tipo === 'excursion'" (click)="bookingData.tipo = 'excursion'; bookingData.pack = 'escolar'" style="font-size: 0.8rem; padding: 0.8rem;">EXCURSIÓN / GRUPO</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Paso 2: Fecha</label>
+                <input type="date" style="flex: 1;" [(ngModel)]="bookingData.fecha" name="fecha" [min]="minDate" (change)="onSelectionChange()" />
+            </div>
+
+            <div class="form-group">
+                <label>Paso 3: Centro
+                    <span *ngIf="!bookingData.fecha" style="font-size: 0.8rem; color: var(--text-muted); font-weight: 400;"> — Selecciona primero una fecha para ver disponibilidad</span>
+                </label>
+                <div class="reg-grid grid-auto-fill" style="gap: 0.8rem;">
+                    @for (center of centers; track center.id) {
+                        <button type="button"
+                            (click)="!isCenterFull(center) && (bookingData.centro = center.slug) && onSelectionChange()"
+                            [disabled]="isCenterFull(center)"
+                            [style.opacity]="isCenterFull(center) ? '0.5' : '1'"
+                            [style.cursor]="isCenterFull(center) ? 'not-allowed' : 'pointer'"
+                            [style.border]="bookingData.centro === center.slug ? '2px solid var(--primary)' : '2px solid var(--border)'"
+                            [style.background]="bookingData.centro === center.slug ? 'var(--primary)' : 'var(--surface)'"
+                            [style.color]="bookingData.centro === center.slug ? '#fff' : 'inherit'"
+                            style="padding: 1rem; border-radius: 12px; text-align: left; font-family: inherit; transition: 0.2s;">
+                            <div style="font-weight: bold; margin-bottom: 0.3rem;">{{ center.name }}</div>
+                            <div style="font-size: 0.8rem; opacity: 0.8;">{{ center.address || '' }}</div>
+                            <div *ngIf="bookingData.fecha" style="margin-top: 0.4rem; font-size: 0.8rem; font-weight: 600;">
+                                {{ getCenterStatus(center) }}
+                            </div>
+                        </button>
+                    }
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Paso 4: Hora</label>
+                <select style="max-width: 200px;" [(ngModel)]="bookingData.hora" name="hora" [disabled]="!bookingData.centro || !bookingData.fecha || isLoadingAvailability">
+                    <option value="" disabled selected>{{ isLoadingAvailability ? 'Cargando...' : (!bookingData.centro || !bookingData.fecha ? 'Selecciona fecha y centro primero' : 'Hora') }}</option>
+                    @if (availableSlots.length > 0) {
+                        @for (slot of availableSlots; track slot.time) {
+                            <option [value]="slot.time" [disabled]="slot.isFull">
+                                {{ slot.time }} {{ slot.isFull ? '(AGOTADO)' : '- Libres: ' + (slot.capacity - slot.occupied) }}
+                            </option>
+                        }
+                    } @else {
+                        <option value="17:00">17:00</option>
+                        <option value="18:00">18:00</option>
+                        <option value="19:00">19:00</option>
+                        <option value="20:00">20:00</option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Paso 4: Selección de Pack / Entradas</label>
+                
+                <!-- Opciones para JUEGO LIBRE -->
+                <div *ngIf="bookingData.tipo === 'juego'">
+                    <div style="animation: fadeIn 0.3s;">
+                        <div *ngFor="let t of tarifasJuego" style="background: var(--surface); padding: 1rem; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: bold; font-family: 'Baloo 2', cursive; color: var(--primary);">{{ t.name }}</div>
+                                <div style="font-size: 0.8rem; color: var(--text-muted);">{{ t.note || t.limit }}</div>
+                                <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">{{ t.price }} {{ t.unit }}</div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <button type="button" (click)="decrementTicket(t.id)" style="border: none; background: #fff; width: 30px; height: 30px; border-radius: 5px; cursor: pointer;">-</button>
+                                <span style="font-weight: bold; min-width: 20px; text-align: center;">{{ bookingData.entradas[t.id] || 0 }}</span>
+                                <button type="button" (click)="incrementTicket(t.id)" style="border: none; background: #fff; width: 30px; height: 30px; border-radius: 5px; cursor: pointer;">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Opciones para CUMPLEAÑOS -->
+                <div *ngIf="bookingData.tipo === 'cumple'" style="animation: fadeIn 0.3s;">
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <label>Número de niños (Total para la fiesta)</label>
+                        <input type="number" [(ngModel)]="bookingData.numNinos" name="numNinos" min="1" style="width: 100px;">
+                    </div>
+                    <div *ngFor="let pack of packsCumple"
+                         [style.border]="bookingData.selectedPackId === pack.id ? '2px solid var(--primary)' : '2px solid var(--border)'"
+                         style="background: var(--surface); padding: 1rem; border-radius: 12px; margin-bottom: 1rem; transition: 0.3s;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <div style="flex: 1;">
+                                <h4 style="margin: 0; color: var(--primary); font-family: 'Baloo 2', cursive;">{{ pack.name }}</h4>
+                                <p style="font-size: 0.8rem; margin: 0.2rem 0; color: var(--text-muted);">
+                                    Mín. {{ pack.minQuantity }} niños - {{ pack.note }}
+                                    <br *ngIf="pack.extraPrice > 0">
+                                    <span style="color: var(--primary); font-weight: 600;" *ngIf="pack.extraPrice > 0">
+                                        Incluye {{ pack.basePeopleCount > 0 ? pack.basePeopleCount : pack.minQuantity }} niños (+{{ pack.extraPrice }}€ por niño extra)
+                                    </span>
+                                </p>
+                                <span style="font-weight: 800;">{{ pack.price }} €</span>
+                            </div>
+                            <button type="button" (click)="selectPack(pack.id)"
+                                    [style.background]="bookingData.selectedPackId === pack.id ? 'var(--primary)' : '#f0f0f0'"
+                                    [style.color]="bookingData.selectedPackId === pack.id ? '#fff' : '#333'"
+                                    style="border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-weight: bold; white-space: nowrap; margin-bottom: 0.5rem;">
+                                {{ bookingData.selectedPackId === pack.id ? '✓ Seleccionado' : 'Seleccionar' }}
+                            </button>
+                        </div>
+                        <!-- Desglose automático del mejor precio -->
+                        <div *ngIf="bookingData.selectedPackId === pack.id"
+                             style="margin-top: 0.8rem; padding-top: 0.8rem; border-top: 1px dashed var(--border); font-size: 0.85rem; color: #555;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>Para {{ bookingData.numNinos }} niños:</span>
+                                <strong>
+                                    {{ getBestBirthdayPrice(bookingData.numNinos, pack).qty }}x pack
+                                    <span *ngIf="getBestBirthdayPrice(bookingData.numNinos, pack).extras > 0">
+                                        + {{ getBestBirthdayPrice(bookingData.numNinos, pack).extras }} extra(s)
+                                    </span>
+                                </strong>
+                            </div>
+                            <div style="text-align: right; color: var(--primary); font-weight: 800; font-size: 1rem; margin-top: 0.3rem;">
+                                Mejor precio: {{ getBestBirthdayPrice(bookingData.numNinos, pack).total }} €
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Opciones para EXCURSIONES -->
+                <div *ngIf="bookingData.tipo === 'excursion'" style="animation: fadeIn 0.3s;">
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <label>Número de personas (Total para el grupo/excursión)</label>
+                        <input type="number" [(ngModel)]="bookingData.numPersonas" name="numPersonas" min="1" style="width: 100px;">
+                    </div>
+                    <div *ngFor="let pack of packsExcursion"
+                         [style.border]="bookingData.selectedPackId === pack.id ? '2px solid var(--primary)' : '2px solid var(--border)'"
+                         style="background: var(--surface); padding: 1rem; border-radius: 12px; margin-bottom: 1rem; transition: 0.3s;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div style="flex: 1;">
+                                <h4 style="margin: 0; color: var(--primary);">{{ pack.name }}</h4>
+                                <p style="font-size: 0.8rem; margin: 0.2rem 0; color: var(--text-muted);">Mín. {{ pack.minQuantity }} personas - {{ pack.note }}</p>
+                                <span style="font-weight: 800;">{{ pack.price }} €/p</span>
+                            </div>
+                            <button type="button" (click)="selectPack(pack.id)"
+                                    [style.background]="bookingData.selectedPackId === pack.id ? 'var(--primary)' : '#f0f0f0'"
+                                    [style.color]="bookingData.selectedPackId === pack.id ? '#fff' : '#333'"
+                                    style="border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-weight: bold; margin-bottom: 0.5rem;">
+                                {{ bookingData.selectedPackId === pack.id ? '✓ Seleccionado' : 'Seleccionar' }}
+                            </button>
+                        </div>
+                        <div *ngIf="bookingData.selectedPackId === pack.id"
+                             style="text-align: right; color: var(--primary); font-weight: 800; font-size: 1rem; margin-top: 0.5rem;">
+                            Total: {{ pack.price * bookingData.numPersonas }} €
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="border-top: 2px dashed var(--border); margin: 1rem 0; padding-top: 1rem; text-align: right; margin-bottom: 0;">
+                <div style="font-size: 0.9rem; color: var(--text-muted);">Total de esta selección</div>
+                <div style="font-family: 'Baloo 2', cursive; font-size: 2rem; color: var(--primary); font-weight: 800; line-height: 1;">{{ total }} €</div>
+            </div>
+            
+            <button class="btn-submit" style="margin-top: 0.5rem; background: var(--surface); color: var(--primary); border: 2px solid var(--primary);" (click)="addToCart()">AÑADIR AL CARRITO</button>
+
+        </div>
+    </div>
+    
+    <!-- Cart Summary Box -->
+    <div *ngIf="cartService.itemCount() > 0" class="reg-box" style="margin-top: 2rem; border: 2px solid var(--primary); animation: fadeIn 0.3s;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h3 style="margin: 0; font-family: 'Baloo 2', cursive; color: var(--primary);">Tu Carrito</h3>
+            <span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 20px; font-weight: bold; font-size: 0.8rem;">
+                {{ cartService.itemCount() }} ítem(s)
+            </span>
+        </div>
+        
+        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <div *ngFor="let item of cartService.items()" style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.02); padding: 0.8rem; border-radius: 8px;">
+                <div style="flex: 1; margin-right: 1rem;">
+                    <div style="font-size: 0.9rem; font-weight: 500;">{{ item.description }}</div>
+                </div>
+                <div style="font-weight: bold; white-space: nowrap; margin-right: 1rem;">{{ item.priceDetails }} €</div>
+                <button (click)="cartService.remove(item.id)" style="background: none; border: none; color: #ff4757; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 5px;" title="Eliminar">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                </button>
+            </div>
+        </div>
+
+        <div style="border-top: 2px dashed var(--border); margin: 1.5rem 0; padding-top: 1rem; display: flex; justify-content: space-between; align-items: flex-end;">
+            <div>
+                <button (click)="cartService.clear()" style="background: none; border: none; color: var(--text-muted); cursor: pointer; text-decoration: underline; font-size: 0.8rem;">Vaciar carrito</button>
+            </div>
+            <div style="text-align: right;">
+                <div style="font-size: 0.9rem; color: var(--text-muted);">Total de la Reserva</div>
+                <div style="font-family: 'Baloo 2', cursive; font-size: 2.5rem; color: var(--primary); font-weight: 800; line-height: 1;">{{ cartService.total() }} €</div>
+            </div>
+        </div>
+        
+        <button class="btn-submit" (click)="proceedToCheckout()">TRAMITAR RESERVA TOTAL</button>
+
+    </div>
+</div>
+
+

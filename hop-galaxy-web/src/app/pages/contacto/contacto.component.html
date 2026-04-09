@@ -1,0 +1,40 @@
+<div class="contact-wrap">
+    <div class="section-tag">Escríbenos</div>
+    <h2>Contacto</h2>
+    <p>¿Tienes dudas? Estamos aquí para ayudarte.</p>
+    <div class="contact-grid">
+        <div class="contact-form">
+            <div class="form-group"><label>Tu nombre</label><input type="text" [(ngModel)]="nombre" placeholder="Nombre completo"></div>
+            <div class="form-group"><label>Email</label><input type="email" [(ngModel)]="email" placeholder="tu@email.com"></div>
+            <div class="form-group"><label>Centro</label>
+                <select [(ngModel)]="selectedCentro">
+                    <option *ngFor="let c of centros" [value]="c._id || c.id">{{ c.nombre }}</option>
+                </select>
+            </div>
+            <div class="form-group"><label>Mensaje</label><textarea [(ngModel)]="mensaje" placeholder="¿En qué podemos ayudarte?"></textarea></div>
+            <button class="btn-submit" (click)="onSubmit()">ENVIAR MENSAJE</button>
+        </div>
+        <div class="contact-cards">
+            <div class="cc" *ngFor="let c of centros">
+                <h4>{{ c.nombre }}</h4>
+                <p>{{ c.ubicacion }}</p>
+                <!-- Oculto tel/email si no existen en la BD -->
+                <a *ngIf="c.telefono" [href]="'tel:' + c.telefono">Tel: {{ c.telefono }}</a>
+                <a *ngIf="c.email" [href]="'mailto:' + c.email">Email: {{ c.email }}</a>
+            </div>
+            <div class="cc">
+                <h4>Síguenos</h4>
+                <div class="social-row" style="margin-top:0.5rem;">
+                    <a class="social-btn ig-btn" href="https://www.instagram.com/saltimbanquisclubboadilla/" target="_blank">Instagram Boadilla</a>
+                    <a class="social-btn ig-btn" href="https://www.instagram.com/saltimbanquisclubbarajas/" target="_blank">Instagram Barajas</a>
+                </div>
+                <div style="margin-top:0.7rem;">
+                    <a class="social-btn tt-btn" href="https://www.tiktok.com/@saltimbanquisclub" target="_blank">TikTok &#64;saltimbanquisclub</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

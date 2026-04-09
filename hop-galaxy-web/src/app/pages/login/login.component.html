@@ -1,0 +1,39 @@
+<div class="reg-box">
+    <h2>Iniciar sesión</h2>
+    <p>Accede a tu cuenta de Saltimbanquis club para gestionar tus reservas.</p>
+
+    <!-- Alerta de Error dentro del cuadro principal -->
+    <div *ngIf="errorMessage" class="error-alert">
+        {{ errorMessage }}
+    </div>
+
+    <form (ngSubmit)="onLogin()" #loginForm="ngForm">
+        <div class="reg-grid" style="grid-template-columns: 1fr;">
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" placeholder="tu@email.com" name="email" [(ngModel)]="loginData.email" required>
+            </div>
+            <div class="form-group">
+                <label style="display: flex; justify-content: space-between;">
+                    Contraseña 
+                    <a routerLink="/recuperar-password" style="color:var(--primary); text-transform: none; font-weight: 600;">¿Olvidaste tu contraseña?</a>
+                </label>
+                <input type="password" placeholder="••••••••" name="password" [(ngModel)]="loginData.password" required>
+            </div>
+        </div>
+        <div style="margin:1.5rem 0 1.2rem; font-size:0.85rem; color:var(--text-muted); line-height:1.6; text-align: center">
+            ¿No tienes cuenta? <a routerLink="/registro" style="color:var(--primary); font-weight: bold;">Regístrate aquí</a>
+        </div>
+        <button type="submit" class="btn-submit" [disabled]="loginForm.invalid">INICIAR SESIÓN</button>
+
+        <div style="display: flex; align-items: center; margin: 1.5rem 0;">
+            <hr style="flex: 1; border: none; border-top: 1px solid var(--border);">
+            <span style="padding: 0 10px; color: var(--text-muted); font-size: 0.9rem;">o</span>
+            <hr style="flex: 1; border: none; border-top: 1px solid var(--border);">
+        </div>
+
+        <div id="google-btn" style="display: flex; justify-content: center; width: 100%;"></div>
+    </form>
+</div>
+
+

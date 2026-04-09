@@ -1,0 +1,57 @@
+<div class="reg-box">
+    <h2>Crear cuenta</h2>
+    <p>Regístrate para gestionar tus reservas y acceder a ofertas exclusivas</p>
+
+    <form (ngSubmit)="onRegister()" #registroForm="ngForm">
+        <div class="reg-grid">
+            <div class="form-group">
+                <label>Nombre</label>
+                <input type="text" placeholder="Nombre" name="nombre" [(ngModel)]="registroData.nombre" required>
+            </div>
+            <div class="form-group">
+                <label>Apellidos</label>
+                <input type="text" placeholder="Apellidos" name="apellidos" [(ngModel)]="registroData.apellidos" required>
+            </div>
+            <div class="form-group col-span">
+                <label>Email</label>
+                <input type="email" placeholder="tu@email.com" name="email" [(ngModel)]="registroData.email" required>
+            </div>
+            <div class="form-group">
+                <label>Teléfono</label>
+                <input type="tel" placeholder="6XX XXX XXX" name="telefono" [(ngModel)]="registroData.telefono">
+            </div>
+            <div class="form-group">
+                <label>Fecha nacimiento</label>
+                <input type="date" name="fechaNacimiento" [(ngModel)]="registroData.fechaNacimiento">
+            </div>
+            <div class="form-group col-span">
+                <label>Contraseña</label>
+                <input type="password" placeholder="••••••••" name="password" [(ngModel)]="registroData.password" required>
+            </div>
+            <div class="form-group col-span">
+                <label>Centro favorito</label>
+                <select name="centroFavorito" [(ngModel)]="registroData.centroFavorito">
+                    <option *ngFor="let c of centros" [value]="c._id || c.id">{{ c.nombre.replace('Saltimbanquis club ', '') }}</option>
+                </select>
+            </div>
+        </div>
+
+        <div style="margin:1.2rem 0; font-size:0.82rem; color:var(--text-muted); line-height:1.6;">
+            Al registrarte aceptas nuestros <a routerLink="/aviso-legal" style="color:var(--primary);">términos y condiciones</a> y la
+            <a routerLink="/aviso-legal" style="color:var(--primary);">política de privacidad</a>.
+        </div>
+        <div style="margin-bottom: 1.2rem; font-size:0.85rem; color:var(--text-muted); line-height:1.6; text-align: center">
+            ¿Ya tienes cuenta? <a routerLink="/login" style="color:var(--primary); font-weight: bold;">Inicia sesión aquí</a>
+        </div>
+        <button type="submit" class="btn-submit" [disabled]="registroForm.invalid">CREAR CUENTA</button>
+
+        <div style="display: flex; align-items: center; margin: 1.5rem 0;">
+            <hr style="flex: 1; border: none; border-top: 1px solid var(--border);">
+            <span style="padding: 0 10px; color: var(--text-muted); font-size: 0.9rem;">o</span>
+            <hr style="flex: 1; border: none; border-top: 1px solid var(--border);">
+        </div>
+
+        <div id="google-btn-register" style="display: flex; justify-content: center; width: 100%;"></div>
+    </form>
+</div>
+
