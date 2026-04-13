@@ -1,0 +1,17 @@
+<div class="faq-wrap">
+    <div class="section-tag">Dudas frecuentes</div>
+    <h2>Preguntas frecuentes</h2>
+    <p>Resolvemos tus dudas más habituales.</p>
+
+    @for (item of faqs; track item.question; let i = $index) {
+        <div class="faq-item">
+            <div class="faq-q" [class.open]="openIndex === i" (click)="toggleFaq(i)">
+                {{ item.question }} <span class="faq-arrow">▼</span>
+            </div>
+            <div class="faq-a" [class.open]="openIndex === i">
+                {{ item.answer }}
+            </div>
+        </div>
+    }
+</div>
+

@@ -1,0 +1,236 @@
+<div class="tarifas-wrap">
+    <div class="tarifas-header">
+        <div class="section-tag">Mi Perfil</div>
+        <h2>Área de Clientes</h2>
+        <p>Gestiona tus reservas, datos personales y consentimientos.</p>
+    </div>
+
+    <div class="tarifa-tabs">
+        <button class="ttab" [class.active]="activeTab === 'reservas'" (click)="setTab('reservas')">Mis Reservas</button>
+        <button class="ttab" [class.active]="activeTab === 'historial'" (click)="setTab('historial')">Historial</button>
+        <button class="ttab" [class.active]="activeTab === 'consentimientos'" (click)="setTab('consentimientos')">Consentimientos</button>
+        <button class="ttab" [class.active]="activeTab === 'perfil'" (click)="setTab('perfil')">Mi Perfil</button>
+    </div>
+
+    @if (activeTab === 'reservas') {
+        <div style="display: flex; justify-content: flex-end; margin-top: 1.5rem;">
+            <button class="btn-hero-primary" style="padding: 0.8rem 1.5rem; font-size: 0.9rem;" routerLink="/reserva">
+                + NUEVA RESERVA
+            </button>
+        </div>
+
+        <div class="contact-cards" style="margin-top: 1rem;">
+            @if (userBookings.length === 0) {
+                <div class="cc" style="text-align: center; padding: 3rem;">
+                    <p>No tienes reservas todavía.</p>
+                </div>
+            }       
+            @for (booking of userBookings; track booking.id) {
+                @if (booking.status !== 'archived') {
+                    <div class="cc" style="border-left: 4px solid var(--primary);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <h4 style="margin:0;">Reserva #{{ booking.numeroReserva }} - {{ booking.createdAt | date:'dd/MM/yyyy' }}</h4>
+                            <span class="centro-badge barajas-badge" style="margin: 0; background-color: var(--primary);">Confirmada</span>
+                        </div>
+                        
+                        <div style="margin-bottom: 1rem;">
+                            @if (booking.details?.items) {
+                                @for (item of booking.details.items; track item.description) {
+                                    <div style="padding: 0.5rem 0; border-bottom: 1px solid rgba(0,0,0,0.05);">
+                                        <div style="font-weight: bold; color: var(--primary); font-size: 0.9rem;">{{ item.description }}</div>
+                                        <div style="font-size: 0.8rem; color: var(--text-muted);">{{ item.centro }} - {{ item.fecha }} {{ item.hora }}</div>
+                                    </div>
+                                }
+                            } @else if (booking.details?.description) {
+                                <div style="padding: 0.5rem 0; border-bottom: 1px solid rgba(0,0,0,0.05);">
+                                    <div style="font-weight: bold; color: var(--primary); font-size: 0.9rem;">{{ booking.details.description }}</div>
+                                    <div style="font-size: 0.8rem; color: var(--text-muted);">{{ booking.details.centro }} - {{ booking.details.fecha }} {{ booking.details.hora }}</div>
+                                </div>
+                            }
+                        </div>
+
+                        <p style="font-size: 1.1rem; color: var(--primary); margin-top: 0.5rem;">
+                            <strong>Total Pagado:</strong> {{ booking.details?.total || booking.total || 0 }}€
+                        </p>
+                        
+                        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                            <button class="btn-submit" style="padding: 0.5rem 1rem; font-size: 0.8rem; flex: 2;" (click)="downloadPDF(booking)" [disabled]="isGeneratingPDF">
+                                ENTRADAS
+                            </button>
+                            <button class="btn-submit" style="padding: 0.5rem 1rem; font-size: 0.8rem; flex: 2; background: var(--surface); color: var(--primary);" (click)="viewConsentOfBooking(booking)">
+                                FIRMA
+                            </button>
+                            @if (isPast(booking)) {
+                                <button class="btn-submit" style="padding: 0.5rem 1rem; font-size: 0.8rem; flex: 1; background: #ffeaa7; color: #d63031; border: none;" (click)="onArchive(booking.id)" title="Archivar (pasada)">
+                                    ARCHIVAR
+                                </button>
+                            }
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    }
+
+    @if (activeTab === 'historial') {
+        <div class="contact-cards" style="margin-top: 2rem;">
+            <p style="color: var(--text-muted); text-align: center; margin-bottom: 1.5rem;">Aquí aparecen tus reservas pasadas o archivadas.</p>
+            @for (booking of userBookings; track booking.id) {
+                @if (booking.status === 'archived' || isPast(booking)) {
+                    <div class="cc" style="opacity: 0.8; border-left: 4px solid var(--text-muted);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <h4 style="margin:0;">Reserva Pasada #{{ booking.numeroReserva }}</h4>
+                            <span class="centro-badge" style="margin: 0; background-color: var(--text-muted);">{{ booking.status === 'archived' ? 'Archivada' : 'Completada' }}</span>
+                        </div>
+                        <div style="margin-bottom: 1rem;">
+                            @if (booking.details?.items) {
+                                @for (item of booking.details.items; track item.description) {
+                                    <div style="font-size: 0.85rem;">{{ item.description }} - {{ item.fecha }}</div>
+                                }
+                            }
+                        </div>
+                        <div style="display: flex; gap: 1rem;">
+                            <button class="btn-submit" style="padding: 0.4rem 0.8rem; font-size: 0.75rem; background: transparent; color: var(--primary); text-decoration: underline;" (click)="downloadPDF(booking)">Ver Ticket</button>
+                            <button class="btn-submit" style="padding: 0.4rem 0.8rem; font-size: 0.75rem; background: transparent; color: #d63031; text-decoration: underline;" (click)="onDelete(booking.id)">Eliminar Permanentemente</button>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    }
+
+    @if (activeTab === 'consentimientos') {
+        <div class="contact-cards" style="margin-top: 2rem;">
+            @if (userConsents.length === 0) {
+                <div class="cc" style="text-align: center; padding: 3rem;">
+                    <p>No tienes consentimientos firmados todavía.</p>
+                    <button class="btn-submit" style="margin-top: 1rem; padding: 0.5rem 1rem;" routerLink="/consentimiento">FIRMAR AHORA</button>
+                </div>
+            }
+            @for (consent of userConsents; track consent.signedAt) {
+                <div class="cc">
+                    <h4>Consentimiento Informado</h4>
+                    <p style="margin-bottom: 0.5rem;"><strong>Firmante:</strong> {{ consent.signerName }}</p>
+                    <p style="margin-bottom: 0.5rem;"><strong>Participantes:</strong> {{ consent.participants }}</p>
+                    <p><strong>Fecha:</strong> <span style="color: var(--success); font-weight: bold;">{{ consent.signedAt | date:'dd/MM/yyyy HH:mm' }}</span></p>
+                    <button class="btn-submit" style="margin-top: 1rem; padding: 0.5rem 1rem; font-size: 0.8rem; background: var(--surface); color: var(--primary);" (click)="showConsent(consent)">VER DOCUMENTO</button>
+                </div>
+            }
+        </div>
+    }
+
+    <!-- MODAL DE CONSENTIMIENTO -->
+    @if (selectedConsent) {
+        <div style="position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 1rem;" (click)="closeConsent()">
+            <div style="background: white; width: 100%; max-width: 600px; border-radius: 12px; overflow: hidden; animation: slideUp 0.3s; box-shadow: 0 10px 40px rgba(0,0,0,0.3);" (click)="$event.stopPropagation()">
+                <div style="padding: 1.5rem; background: var(--primary); color: white; display: flex; justify-content: space-between; align-items: center;">
+                    <h3 style="margin: 0; font-family: 'Baloo 2', cursive;">Documento de Consentimiento</h3>
+                    <button (click)="closeConsent()" style="background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer;">&times;</button>
+                </div>
+                <div style="padding: 2rem; max-height: 70vh; overflow-y: auto;">
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <div style="font-family: 'Baloo 2', cursive; font-size: 2rem; color: var(--primary); font-weight: 800;">Saltimbanquis club</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Documento de Consentimiento</div>
+                    </div>
+                    <div style="margin-bottom: 1.5rem; font-size: 0.95rem; line-height: 1.6;">
+                        <p><strong>Firmante:</strong> {{ selectedConsent.signerName }}</p>
+                        <p><strong>Participantes:</strong> {{ selectedConsent.participants }}</p>
+                        <p><strong>Fecha de Firma:</strong> {{ selectedConsent.signedAt | date:'dd/MM/yyyy HH:mm' }}</p>
+                    </div>
+                    <div style="border: 2px solid var(--border); padding: 1rem; text-align: center; border-radius: 8px; background: #fff;">
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;">Firma Digital:</p>
+                        <img [src]="selectedConsent.signature" style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
+                    </div>
+                    <div style="margin-top: 1.5rem; font-size: 0.8rem; color: var(--text-muted); text-align: justify; line-height: 1.4;">
+                        Este documento digital vincula al firmante con la aceptación de las normas de seguridad del centro. Conserva este documento como justificante.
+                    </div>
+                </div>
+                <div style="padding: 1.2rem; text-align: right; background: var(--surface); border-top: 1px solid var(--border);">
+                    <button class="btn-submit" style="padding: 0.6rem 2rem;" (click)="closeConsent()">ENTENDIDO</button>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- PLANTILLA OCULTA PARA PDF (TICKET) -->
+    <div style="position: absolute; left: -9999px; top: 0;">
+        <div id="ticket-print-template" style="width: 800px; padding: 40px; background: white; color: black; font-family: Arial, sans-serif;">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <h1 style="color: #6c5ce7; font-size: 36px; margin-bottom: 5px;">Saltimbanquis club</h1>
+                <p style="color: #666; font-size: 14px;">Entrada Oficial - Reserva Confirmada</p>
+            </div>
+            
+            <div style="border: 2px solid #6c5ce7; border-radius: 15px; padding: 30px; margin-bottom: 30px;">
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 15px;">
+                    <div>
+                        <p style="color: #999; font-size: 12px; margin-bottom: 5px; text-transform: uppercase;">Cliente</p>
+                        <p style="font-size: 18px; font-weight: bold; margin: 0;">{{ userProfile?.nombre }} {{ userProfile?.apellidos }}</p>
+                    </div>
+                    <div style="text-align: right;">
+                        <p style="color: #999; font-size: 12px; margin-bottom: 5px; text-transform: uppercase;">Email</p>
+                        <p style="font-size: 14px; margin: 0;">{{ userProfile?.email }}</p>
+                    </div>
+                </div>
+
+                <h3 style="color: #6c5ce7; margin-bottom: 15px;">Listado de Pases</h3>
+                @for (item of ticketItems; track item.id) {
+                    <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between;">
+                        <div>
+                            <p style="font-weight: bold; margin: 0;">{{ item.description }}</p>
+                            <p style="font-size: 12px; color: #666; margin: 5px 0 0;">{{ item.centro }} - {{ item.fecha }} {{ item.hora }}</p>
+                        </div>
+                        <div style="text-align: right; font-weight: bold; color: #6c5ce7;">
+                            {{ item.priceDetails }}€
+                        </div>
+                    </div>
+                }
+
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 2px dashed #eee; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <p style="font-size: 12px; color: #666;">Presenta este ticket en recepción (Digital o impreso)</p>
+                        <p style="font-size: 10px; color: #999; margin-top: 5px;">Generado el {{ today | date:'dd/MM/yyyy HH:mm' }}</p>
+                    </div>
+                    <div style="text-align: right;">
+                        <p style="font-size: 14px; color: #666; margin-bottom: 5px;">Total Pagado</p>
+                        <p style="font-size: 32px; font-weight: 800; color: #6c5ce7; margin: 0;">{{ lastTotal }}€</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; color: #999; font-size: 11px;">
+                <p>Uso obligatorio de calcetines antideslizantes. Todos los menores deben estar acompañados.</p>
+                <p>Sujeto a normas de seguridad vigentes. No se admiten devoluciones.</p>
+            </div>
+        </div>
+    </div>
+
+    @if (activeTab === 'perfil') {
+        <div class="reg-box" style="margin: 2rem auto 0; padding: 2rem;">
+            @if (userProfile) {
+                <div class="reg-grid">
+                    <div class="form-group"><label>Nombre</label><input type="text" [(ngModel)]="userProfile.nombre"></div>
+                    <div class="form-group"><label>Apellidos</label><input type="text" [(ngModel)]="userProfile.apellidos"></div>
+                    <div class="form-group col-span"><label>Email</label><input type="email" [value]="userProfile.email" disabled style="background: var(--surface);"></div>
+                    <div class="form-group"><label>Teléfono</label><input type="tel" [(ngModel)]="userProfile.telefono"></div>
+                    <div class="form-group"><label>Centro favorito</label>
+                        <select [(ngModel)]="userProfile.centroFavorito">
+                            <option value="">Selecciona un centro</option>
+                            @for (center of centers; track center.id) {
+                                <option [value]="center.name">{{ center.name }}</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <button class="btn-submit" style="margin-top: 1.5rem;" (click)="saveProfile()">GUARDAR CAMBIOS</button>
+            } @else {
+                <div style="text-align: center; padding: 2rem;">Cargando perfil...</div>
+            }
+        </div>
+        
+        <div style="text-align: center; margin-top: 2rem;">
+            <a style="color: var(--secondary); font-weight: bold; cursor: pointer; font-size: 0.9rem;" (click)="logout()">Cerrar sesión</a>
+        </div>
+    }
+</div>
+
+

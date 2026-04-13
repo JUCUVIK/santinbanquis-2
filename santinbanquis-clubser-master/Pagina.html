@@ -1,0 +1,1876 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hop Galaxy | Parque Indoor para Familias</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #fffbf5;
+            --surface: #fff3e8;
+            --card: #ffffff;
+            --border: #ffe0c8;
+            --accent: #ff6b1a;
+            --accent2: #9b5de5;
+            --neon: #00c9d4;
+            --pink: #ff3da6;
+            --yellow: #ffd000;
+            --green: #06d6a0;
+            --text: #2d1b69;
+            --muted: #8b7aa0;
+            --radius: 20px;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        /* ── CONFETTI DOTS BG ── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            background-image:
+                radial-gradient(8px 8px at 8% 15%, rgba(255, 107, 26, 0.2) 0%, transparent 100%),
+                radial-gradient(6px 6px at 25% 70%, rgba(155, 93, 229, 0.18) 0%, transparent 100%),
+                radial-gradient(9px 9px at 50% 8%, rgba(255, 208, 0, 0.22) 0%, transparent 100%),
+                radial-gradient(6px 6px at 72% 85%, rgba(255, 61, 166, 0.18) 0%, transparent 100%),
+                radial-gradient(8px 8px at 88% 30%, rgba(6, 214, 160, 0.2) 0%, transparent 100%),
+                radial-gradient(5px 5px at 15% 90%, rgba(0, 201, 212, 0.18) 0%, transparent 100%),
+                radial-gradient(7px 7px at 60% 55%, rgba(255, 107, 26, 0.14) 0%, transparent 100%),
+                radial-gradient(5px 5px at 38% 40%, rgba(155, 93, 229, 0.12) 0%, transparent 100%),
+                radial-gradient(6px 6px at 92% 65%, rgba(255, 208, 0, 0.2) 0%, transparent 100%),
+                radial-gradient(7px 7px at 3% 50%, rgba(255, 61, 166, 0.15) 0%, transparent 100%);
+            pointer-events: none;
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.8rem 2.5rem;
+            background: rgba(255, 251, 245, 0.97);
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid var(--border);
+            box-shadow: 0 2px 24px rgba(255, 107, 26, 0.08);
+        }
+
+        .logo-wrap {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            cursor: pointer;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent), var(--pink));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 0 20px rgba(255, 107, 53, 0.4);
+        }
+
+        .logo-text {
+            font-family: 'Baloo 2', cursive;
+            font-size: 1.4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff6b35, #ff3e9d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-item>a,
+        .nav-item>span {
+            display: block;
+            padding: 0.5rem 0.9rem;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: color 0.2s, background 0.2s;
+        }
+
+        .nav-item:hover>a,
+        .nav-item:hover>span {
+            color: var(--text);
+            background: var(--surface);
+        }
+
+        .dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 0.5rem;
+            min-width: 180px;
+            z-index: 300;
+            box-shadow: 0 12px 40px rgba(255, 107, 26, 0.15);
+        }
+
+        .nav-item:hover .dropdown {
+            display: block;
+        }
+
+        .dropdown a {
+            display: block;
+            padding: 0.5rem 0.8rem;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.15s;
+        }
+
+        .dropdown a:hover {
+            color: var(--accent);
+            background: rgba(255, 107, 53, 0.1);
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--accent), var(--pink));
+            color: white;
+            border: none;
+            padding: 0.6rem 1.4rem;
+            border-radius: 50px;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 800;
+            font-size: 0.85rem;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            box-shadow: 0 0 20px rgba(255, 107, 53, 0.3);
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 0 30px rgba(255, 107, 53, 0.5);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .hamburger span {
+            width: 24px;
+            height: 2px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        /* ── PAGES ── */
+        .page {
+            display: none;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* ── HERO ── */
+        #page-home {
+            padding-top: 74px;
+        }
+
+        .hero {
+            position: relative;
+            min-height: 92vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 3rem 2rem;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 50% 30%, rgba(255, 208, 0, 0.18) 0%, transparent 60%),
+                radial-gradient(ellipse 50% 40% at 15% 80%, rgba(255, 107, 26, 0.12) 0%, transparent 60%),
+                radial-gradient(ellipse 50% 50% at 85% 20%, rgba(155, 93, 229, 0.12) 0%, transparent 60%),
+                radial-gradient(ellipse 40% 40% at 50% 100%, rgba(6, 214, 160, 0.1) 0%, transparent 60%);
+        }
+
+        .hero-orbs {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .orb1 {
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 208, 0, 0.25);
+            top: -100px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        .orb2 {
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 107, 26, 0.18);
+            bottom: 0;
+            right: -50px;
+            animation-delay: -3s;
+        }
+
+        .orb3 {
+            width: 200px;
+            height: 200px;
+            background: rgba(155, 93, 229, 0.15);
+            top: 30%;
+            left: 60%;
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0) scale(1);
+            }
+
+            50% {
+                transform: translateY(-30px) scale(1.05);
+            }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+        }
+
+        .hero-tag {
+            display: inline-block;
+            background: rgba(255, 107, 53, 0.15);
+            border: 1px solid rgba(255, 107, 53, 0.4);
+            color: var(--accent);
+            font-size: 0.8rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 0.4rem 1.2rem;
+            border-radius: 50px;
+            margin-bottom: 1.5rem;
+            animation: fadeUp 0.6s ease both;
+        }
+
+        .hero h1 {
+            font-family: 'Baloo 2', cursive;
+            font-size: clamp(3rem, 7vw, 6rem);
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 1rem;
+            animation: fadeUp 0.6s 0.1s ease both;
+        }
+
+        .hero h1 .line1 {
+            display: block;
+            color: var(--text);
+            text-shadow: 2px 2px 0 rgba(255, 208, 0, 0.3);
+        }
+
+        .hero h1 .line2 {
+            display: block;
+            background: linear-gradient(135deg, var(--accent), var(--pink), var(--yellow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-sub {
+            font-size: 1.2rem;
+            color: var(--muted);
+            margin-bottom: 2.5rem;
+            font-weight: 600;
+            animation: fadeUp 0.6s 0.2s ease both;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeUp 0.6s 0.3s ease both;
+        }
+
+        .btn-hero {
+            padding: 0.9rem 2.5rem;
+            border-radius: 50px;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.2s;
+            border: none;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-hero-primary {
+            background: linear-gradient(135deg, var(--accent), var(--pink));
+            color: white;
+            box-shadow: 0 0 30px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-hero-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 50px rgba(255, 107, 53, 0.6);
+        }
+
+        .btn-hero-secondary {
+            background: transparent;
+            color: var(--text);
+            border: 2px solid var(--border) !important;
+        }
+
+        .btn-hero-secondary:hover {
+            border-color: var(--accent) !important;
+            color: var(--accent);
+        }
+
+        .hero-scroll {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--muted);
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .hero-scroll::before {
+            content: '↓';
+            font-size: 1.2rem;
+            color: var(--accent);
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+
+            50% {
+                transform: translateX(-50%) translateY(8px);
+            }
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ── SERVICIOS ── */
+        .section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3.5rem;
+        }
+
+        .section-tag {
+            display: inline-block;
+            color: var(--neon);
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 0.8rem;
+        }
+
+        .section-header h2 {
+            font-family: 'Baloo 2', cursive;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+        }
+
+        .section-header p {
+            color: var(--muted);
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .service-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .service-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 60px rgba(255, 107, 53, 0.15);
+        }
+
+        .service-img {
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-img::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, transparent 60%, rgba(255, 255, 255, 0.9));
+        }
+
+        .svc-excursiones .service-img {
+            background: linear-gradient(135deg, #e8d5ff, #c4a0ff, #9b5de5);
+        }
+
+        .svc-libre .service-img {
+            background: linear-gradient(135deg, #c8f7f8, #80e8ec, #00c9d4);
+        }
+
+        .svc-cumple .service-img {
+            background: linear-gradient(135deg, #ffd6ec, #ffaad4, #ff3da6);
+        }
+
+        .svc-fiesta .service-img {
+            background: linear-gradient(135deg, #ffe4cc, #ffc08a, #ff6b1a);
+        }
+
+        .service-body {
+            padding: 1.5rem;
+        }
+
+        .service-body h3 {
+            font-family: 'Baloo 2', cursive;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+        }
+
+        .service-body p {
+            color: var(--muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .service-link {
+            color: var(--accent);
+            font-size: 0.85rem;
+            font-weight: 800;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: gap 0.2s;
+        }
+
+        .service-link:hover {
+            gap: 0.7rem;
+        }
+
+        /* ── CENTROS ── */
+        .centros-wrap {
+            background: linear-gradient(180deg, #fff8ef 0%, #ffeedd 100%);
+            padding: 5rem 2rem;
+            border-top: 2px dashed var(--border);
+            border-bottom: 2px dashed var(--border);
+        }
+
+        .centros-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            max-width: 1100px;
+            margin: 3.5rem auto 0;
+        }
+
+        .centro-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.2s;
+        }
+
+        .centro-card:hover {
+            border-color: var(--neon);
+        }
+
+        .centro-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+
+        .centro-boadilla::before {
+            background: linear-gradient(90deg, #9b5de5, #00c9d4);
+        }
+
+        .centro-barajas::before {
+            background: linear-gradient(90deg, #ff6b1a, #ff3da6);
+        }
+
+        .centro-badge {
+            display: inline-block;
+            padding: 0.3rem 0.9rem;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .boadilla-badge {
+            background: rgba(124, 58, 237, 0.2);
+            color: #a78bfa;
+        }
+
+        .barajas-badge {
+            background: rgba(255, 107, 53, 0.2);
+            color: var(--accent);
+        }
+
+        .centro-card h3 {
+            font-family: 'Baloo 2', cursive;
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 0.3rem;
+        }
+
+        .centro-card .address {
+            color: var(--muted);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .horario-grid {
+            display: grid;
+            gap: 0.4rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .horario-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0.8rem;
+            background: var(--surface);
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+
+        .horario-row .dia {
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        .horario-row .hora {
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .aviso {
+            background: rgba(255, 225, 53, 0.08);
+            border: 1px solid rgba(255, 225, 53, 0.2);
+            border-radius: 10px;
+            padding: 0.8rem 1rem;
+            font-size: 0.8rem;
+            color: #ffe135;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .contact-info-row {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            font-size: 0.9rem;
+        }
+
+        .contact-info-item .ci-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--surface);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .social-row {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .social-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            cursor: pointer;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+            transition: all 0.2s;
+        }
+
+        .ig-btn {
+            background: rgba(255, 62, 157, 0.15);
+            color: #ff3e9d;
+            border: 1px solid rgba(255, 62, 157, 0.3);
+        }
+
+        .ig-btn:hover {
+            background: rgba(255, 62, 157, 0.25);
+        }
+
+        .tt-btn {
+            background: rgba(0, 229, 255, 0.1);
+            color: var(--neon);
+            border: 1px solid rgba(0, 229, 255, 0.2);
+        }
+
+        .tt-btn:hover {
+            background: rgba(0, 229, 255, 0.2);
+        }
+
+        /* ── TARIFAS ── */
+        #page-tarifas {
+            padding-top: 74px;
+        }
+
+        .tarifas-wrap {
+            padding: 4rem 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .tarifas-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .tarifas-header h2 {
+            font-family: 'Baloo 2', cursive;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .tarifas-header p {
+            color: var(--muted);
+        }
+
+        .tarifa-tabs {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+        }
+
+        .ttab {
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 2px solid var(--border);
+            color: var(--muted);
+            background: transparent;
+            transition: all 0.2s;
+        }
+
+        .ttab.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+
+        .tarifa-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.2rem;
+        }
+
+        .tarifa-card {
+            background: var(--card);
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .tarifa-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+        }
+
+        .tarifa-card.featured {
+            border-color: var(--accent);
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(255, 62, 157, 0.05));
+        }
+
+        .featured-tag {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--accent), var(--pink));
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 0.2rem 0.9rem;
+            border-radius: 50px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .tarifa-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .tarifa-name {
+            font-family: 'Baloo 2', cursive;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+
+        .tarifa-who {
+            color: var(--muted);
+            font-size: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tarifa-price {
+            font-family: 'Baloo 2', cursive;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        .tarifa-price span {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--muted);
+        }
+
+        .tarifa-note {
+            color: var(--muted);
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        /* ── CONTACTO ── */
+        #page-contacto {
+            padding-top: 74px;
+        }
+
+        .contact-wrap {
+            padding: 4rem 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .contact-wrap h2 {
+            font-family: 'Baloo 2', cursive;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-wrap>p {
+            color: var(--muted);
+            margin-bottom: 3rem;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 3rem;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .form-group label {
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--muted);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.85rem 1rem;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.95rem;
+            border-radius: 10px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--accent);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: var(--muted);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, var(--accent), var(--pink));
+            color: white;
+            border: none;
+            padding: 0.9rem;
+            border-radius: 50px;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 107, 53, 0.3);
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 40px rgba(255, 107, 53, 0.5);
+        }
+
+        .contact-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .cc {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+        }
+
+        .cc h4 {
+            font-family: 'Baloo 2', cursive;
+            font-size: 1rem;
+            margin-bottom: 0.8rem;
+            color: var(--accent);
+        }
+
+        .cc p,
+        .cc a {
+            color: var(--muted);
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        /* ── FAQ ── */
+        #page-faq {
+            padding-top: 74px;
+        }
+
+        .faq-wrap {
+            padding: 4rem 2rem;
+            max-width: 780px;
+            margin: 0 auto;
+        }
+
+        .faq-wrap h2 {
+            font-family: 'Baloo 2', cursive;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .faq-wrap>p {
+            color: var(--muted);
+            margin-bottom: 3rem;
+        }
+
+        .faq-item {
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            margin-bottom: 0.8rem;
+            background: var(--card);
+        }
+
+        .faq-q {
+            padding: 1.2rem 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: background 0.2s;
+        }
+
+        .faq-q:hover {
+            background: var(--surface);
+        }
+
+        .faq-q.open {
+            color: var(--accent);
+        }
+
+        .faq-arrow {
+            transition: transform 0.2s;
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        .faq-q.open .faq-arrow {
+            transform: rotate(180deg);
+            color: var(--accent);
+        }
+
+        .faq-a {
+            display: none;
+            padding: 0 1.5rem 1.2rem;
+            color: var(--muted);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        .faq-a.open {
+            display: block;
+        }
+
+        /* ── REGISTRO ── */
+        #page-registro {
+            padding-top: 74px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6rem 2rem 3rem;
+        }
+
+        .reg-box {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 3rem;
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reg-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--pink), var(--accent2), var(--neon));
+        }
+
+        .reg-box h2 {
+            font-family: 'Baloo 2', cursive;
+            font-size: 2rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .reg-box p {
+            color: var(--muted);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        .reg-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .col-span {
+            grid-column: 1 / -1;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            background: linear-gradient(135deg, #fff3e8, #ffe4d0);
+            border-top: 2px solid var(--border);
+            padding: 3rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 3rem;
+            max-width: 1100px;
+            margin: 0 auto 2rem;
+        }
+
+        .footer-brand .logo-text {
+            font-family: 'Baloo 2', cursive;
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff6b35, #ff3e9d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-brand p {
+            color: var(--muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .footer-col h4 {
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--muted);
+            margin-bottom: 1rem;
+        }
+
+        .footer-col a {
+            display: block;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+            cursor: pointer;
+        }
+
+        .footer-col a:hover {
+            opacity: 1;
+            color: var(--accent);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border);
+            padding-top: 1.5rem;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.85rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .footer-bottom a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        /* ── TOAST ── */
+        #toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 999;
+            background: linear-gradient(135deg, var(--accent), var(--pink));
+            color: white;
+            padding: 0.9rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: none;
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* ── MOBILE ── */
+        @media (max-width: 768px) {
+            nav {
+                padding: 0.8rem 1.2rem;
+            }
+
+            .nav-menu {
+                display: none;
+                flex-direction: column;
+                position: fixed;
+                top: 65px;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: var(--bg);
+                padding: 2rem;
+                z-index: 300;
+                overflow-y: auto;
+            }
+
+            .nav-menu.open {
+                display: flex;
+                background: rgba(255, 251, 245, 0.99);
+            }
+
+            .nav-item {
+                border-bottom: 1px solid var(--border);
+            }
+
+            .nav-item>a,
+            .nav-item>span {
+                padding: 1rem 0;
+                font-size: 1rem;
+            }
+
+            .dropdown {
+                display: none !important;
+                position: static;
+                box-shadow: none;
+                border: none;
+                padding-left: 1rem;
+            }
+
+            .nav-item:focus-within .dropdown {
+                display: block !important;
+            }
+
+            .nav-cta {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .centros-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .reg-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="logo-wrap" onclick="show('home')">
+            <div class="logo-icon">🚀</div>
+            <div class="logo-text">Hop Galaxy</div>
+        </div>
+
+        <div class="nav-menu" id="navMenu">
+            <div class="nav-item">
+                <span>CENTROS ▾</span>
+                <div class="dropdown">
+                    <a onclick="show('barajas')">BARAJAS</a>
+                    <a onclick="show('boadilla')">BOADILLA</a>
+                </div>
+            </div>
+            <div class="nav-item"><a onclick="show('tarifas')">TARIFAS</a></div>
+            <div class="nav-item"><a onclick="show('registro')">REGISTRO</a></div>
+            <div class="nav-item">
+                <span>INFORMACIÓN ▾</span>
+                <div class="dropdown">
+                    <a onclick="show('contacto')">CONTACTO</a>
+                    <a onclick="show('faq')">PREGUNTAS</a>
+                </div>
+            </div>
+            <button class="nav-cta" onclick="show('reserva'); toast('¡Redirigiendo al sistema de reservas!')">RESERVA
+                YA</button>
+        </div>
+
+        <div class="hamburger" onclick="toggleMenu()" id="hamburger">
+            <span></span><span></span><span></span>
+        </div>
+    </nav>
+
+    <!-- HOME -->
+    <div id="page-home" class="page active">
+        <div class="hero">
+            <div class="hero-bg"></div>
+            <div class="hero-orbs">
+                <div class="orb orb1"></div>
+                <div class="orb orb2"></div>
+                <div class="orb orb3"></div>
+            </div>
+            <div class="hero-content">
+                <div class="hero-tag">🌌 Trampoline Park · Madrid</div>
+                <h1>
+                    <span class="line1">BIENVENIDOS A</span>
+                    <span class="line2">HOP GALAXY</span>
+                </h1>
+                <p class="hero-sub">¡El Trampoline Park donde puede jugar toda la familia!</p>
+                <div class="hero-btns">
+                    <a class="btn-hero btn-hero-primary"
+                        onclick="show('reserva'); toast('Redirigiendo al sistema de reservas...')">RESERVA YA</a>
+                    <a class="btn-hero btn-hero-secondary" onclick="show('tarifas')">VER TARIFAS</a>
+                </div>
+            </div>
+            <div class="hero-scroll">DESCUBRE MÁS</div>
+        </div>
+
+        <!-- Servicios -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-tag">✨ Nuestros servicios</div>
+                <h2>¿Qué puedes hacer en Hop Galaxy?</h2>
+                <p>Diversión sin límites para todas las edades</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card svc-excursiones">
+                    <div class="service-img">🎒</div>
+                    <div class="service-body">
+                        <h3>Excursiones</h3>
+                        <p>¡Diversión en grupo! Perfectas para colegios, campamentos y grupos organizados.</p>
+                        <a class="service-link" onclick="show('barajas')">Más info →</a>
+                    </div>
+                </div>
+                <div class="service-card svc-libre">
+                    <div class="service-img">🤸</div>
+                    <div class="service-body">
+                        <h3>Juego libre</h3>
+                        <p>¡Juega sin límites! Acceso libre a todas las zonas de trampolines y atracciones.</p>
+                        <a class="service-link" onclick="show('tarifas')">Más info →</a>
+                    </div>
+                </div>
+                <div class="service-card svc-cumple">
+                    <div class="service-img">🎂</div>
+                    <div class="service-body">
+                        <h3>Cumpleaños</h3>
+                        <p>¡Celebraciones inolvidables! Paquetes especiales para que tu cumpleaños sea único.</p>
+                        <a class="service-link" onclick="show('barajas')">Más info →</a>
+                    </div>
+                </div>
+                <div class="service-card svc-fiesta">
+                    <div class="service-img">🎉</div>
+                    <div class="service-body">
+                        <h3>Fiestas privadas</h3>
+                        <p>¡El parque entero para ti! Alquila el espacio completo para tu evento especial.</p>
+                        <a class="service-link" onclick="show('barajas')">Más info →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Centros -->
+        <div class="centros-wrap">
+            <div style="max-width:1100px; margin:0 auto;">
+                <div class="section-header">
+                    <div class="section-tag">📍 Nuestros centros</div>
+                    <h2>Dos ubicaciones en Madrid</h2>
+                    <p>Encuéntranos en Barajas y Boadilla del Monte</p>
+                </div>
+                <div class="centros-grid">
+                    <!-- BOADILLA -->
+                    <div class="centro-card centro-boadilla">
+                        <span class="centro-badge boadilla-badge">Boadilla del Monte</span>
+                        <h3>Hop Galaxy Boadilla</h3>
+                        <p class="address">Crta. de Majadahonda, 50, 1ª planta<br>Centro Comercial El Palacio · 28660
+                            Madrid</p>
+                        <div class="contact-info-row">
+                            <div class="contact-info-item">
+                                <div class="ci-icon">📞</div><span>630 69 06 19</span>
+                            </div>
+                            <div class="contact-info-item">
+                                <div class="ci-icon">✉️</div><span>info@hopgalaxy.com</span>
+                            </div>
+                        </div>
+                        <div class="horario-grid">
+                            <div class="horario-row"><span class="dia">Lun – Jue</span><span class="hora">17:00 –
+                                    21:00</span></div>
+                            <div class="horario-row"><span class="dia">Viernes</span><span class="hora">17:00 –
+                                    22:00</span></div>
+                            <div class="horario-row"><span class="dia">Sábado</span><span class="hora">11:00 –
+                                    22:00</span></div>
+                            <div class="horario-row"><span class="dia">Domingo</span><span class="hora">11:00 –
+                                    21:00</span></div>
+                        </div>
+                        <div class="aviso">⚠️ El último pase finaliza 15 minutos antes del cierre</div>
+                        <div class="social-row">
+                            <a class="social-btn ig-btn" href="https://www.instagram.com/hopgalaxyboadilla/"
+                                target="_blank">📷 Instagram</a>
+                            <a class="social-btn tt-btn" href="https://www.tiktok.com/@hopgalaxy" target="_blank">🎵
+                                TikTok</a>
+                        </div>
+                    </div>
+
+                    <!-- BARAJAS -->
+                    <div class="centro-card centro-barajas">
+                        <span class="centro-badge barajas-badge">Barajas · San Blas</span>
+                        <h3>Hop Galaxy Barajas</h3>
+                        <p class="address">Calle Campezo, 3 (Local 6)<br>28022 San Blas-Canillejas, Madrid</p>
+                        <div class="contact-info-row">
+                            <div class="contact-info-item">
+                                <div class="ci-icon">📞</div><span>666 06 85 96</span>
+                            </div>
+                            <div class="contact-info-item">
+                                <div class="ci-icon">✉️</div><span>barajas@hopgalaxy.com</span>
+                            </div>
+                        </div>
+                        <div class="horario-grid">
+                            <div class="horario-row"><span class="dia">Lun – Jue</span><span class="hora">17:00 –
+                                    22:00</span></div>
+                            <div class="horario-row"><span class="dia">Viernes</span><span class="hora">17:00 –
+                                    23:00</span></div>
+                            <div class="horario-row"><span class="dia">Sábado</span><span class="hora">11:00 –
+                                    23:00</span></div>
+                            <div class="horario-row"><span class="dia">Domingo</span><span class="hora">11:00 –
+                                    22:00</span></div>
+                        </div>
+                        <div class="aviso">⚠️ El último pase finaliza 15 minutos antes del cierre</div>
+                        <div class="social-row">
+                            <a class="social-btn ig-btn" href="https://www.instagram.com/hopgalaxybarajas/"
+                                target="_blank">📷 Instagram</a>
+                            <a class="social-btn tt-btn" href="https://www.tiktok.com/@hopgalaxy" target="_blank">🎵
+                                TikTok</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TARIFAS -->
+    <div id="page-tarifas" class="page">
+        <div class="tarifas-wrap">
+            <div class="tarifas-header">
+                <div class="section-tag">💰 Precios</div>
+                <h2>Tarifas</h2>
+                <p>Precios para todos. Sin sorpresas.</p>
+            </div>
+            <div class="tarifa-tabs">
+                <button class="ttab active" onclick="filterTarifas('juego')">Juego libre</button>
+                <button class="ttab" onclick="filterTarifas('cumple')">Cumpleaños</button>
+                <button class="ttab" onclick="filterTarifas('excursion')">Excursiones</button>
+            </div>
+            <div class="tarifa-grid" id="tarifaGrid">
+                <div class="tarifa-card" data-type="juego">
+                    <div class="tarifa-icon">👶</div>
+                    <div class="tarifa-name">Bebé</div>
+                    <div class="tarifa-who">Hasta 2 años</div>
+                    <div class="tarifa-price">Gratis<span></span></div>
+                    <div class="tarifa-note">Acompañado de adulto</div>
+                </div>
+                <div class="tarifa-card" data-type="juego">
+                    <div class="tarifa-icon">🧒</div>
+                    <div class="tarifa-name">Infantil</div>
+                    <div class="tarifa-who">3 – 12 años</div>
+                    <div class="tarifa-price">8<span> €/hora</span></div>
+                    <div class="tarifa-note">Calcetines incluidos</div>
+                </div>
+                <div class="tarifa-card featured" data-type="juego">
+                    <div class="featured-tag">⭐ Más popular</div>
+                    <div class="tarifa-icon">🧑</div>
+                    <div class="tarifa-name">Junior/Adulto</div>
+                    <div class="tarifa-who">13+ años</div>
+                    <div class="tarifa-price">10<span> €/hora</span></div>
+                    <div class="tarifa-note">Calcetines incluidos</div>
+                </div>
+                <div class="tarifa-card" data-type="juego">
+                    <div class="tarifa-icon">👨‍👩‍👧</div>
+                    <div class="tarifa-name">Familiar</div>
+                    <div class="tarifa-who">2 adultos + 2 niños</div>
+                    <div class="tarifa-price">30<span> €/hora</span></div>
+                    <div class="tarifa-note">Ahorra 6€</div>
+                </div>
+                <div class="tarifa-card" data-type="cumple">
+                    <div class="tarifa-icon">🎂</div>
+                    <div class="tarifa-name">Pack Básico</div>
+                    <div class="tarifa-who">Hasta 10 niños</div>
+                    <div class="tarifa-price">150<span> €</span></div>
+                    <div class="tarifa-note">1h trampolín + sala + tarta</div>
+                </div>
+                <div class="tarifa-card featured" data-type="cumple">
+                    <div class="featured-tag">⭐ Recomendado</div>
+                    <div class="tarifa-icon">🎉</div>
+                    <div class="tarifa-name">Pack Premium</div>
+                    <div class="tarifa-who">Hasta 15 niños</div>
+                    <div class="tarifa-price">220<span> €</span></div>
+                    <div class="tarifa-note">2h trampolín + sala + catering</div>
+                </div>
+                <div class="tarifa-card" data-type="excursion">
+                    <div class="tarifa-icon">🎒</div>
+                    <div class="tarifa-name">Grupo escolar</div>
+                    <div class="tarifa-who">Mínimo 20 alumnos</div>
+                    <div class="tarifa-price">7<span> €/niño</span></div>
+                    <div class="tarifa-note">Monitor incluido</div>
+                </div>
+                <div class="tarifa-card" data-type="excursion">
+                    <div class="tarifa-icon">🏆</div>
+                    <div class="tarifa-name">Grupo premium</div>
+                    <div class="tarifa-who">Mínimo 30 personas</div>
+                    <div class="tarifa-price">9<span> €/pers.</span></div>
+                    <div class="tarifa-note">Monitor + snack</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTACTO -->
+    <div id="page-contacto" class="page">
+        <div class="contact-wrap">
+            <div class="section-tag">📬 Escríbenos</div>
+            <h2>Contacto</h2>
+            <p>¿Tienes dudas? Estamos aquí para ayudarte.</p>
+            <div class="contact-grid">
+                <div class="contact-form">
+                    <div class="form-group"><label>Tu nombre</label><input type="text" placeholder="Nombre completo">
+                    </div>
+                    <div class="form-group"><label>Email</label><input type="email" placeholder="tu@email.com"></div>
+                    <div class="form-group"><label>Centro</label>
+                        <select>
+                            <option>Barajas</option>
+                            <option>Boadilla</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Mensaje</label><textarea
+                            placeholder="¿En qué podemos ayudarte?"></textarea></div>
+                    <button class="btn-submit" onclick="toast('¡Mensaje enviado! Te responderemos pronto 🚀')">ENVIAR
+                        MENSAJE</button>
+                </div>
+                <div class="contact-cards">
+                    <div class="cc">
+                        <h4>🏢 Hop Galaxy Boadilla</h4>
+                        <p>Crta. de Majadahonda, 50, 1ª planta</p>
+                        <p>C.C. El Palacio · Boadilla del Monte</p>
+                        <a href="tel:630690619">📞 630 69 06 19</a>
+                        <a href="mailto:info@hopgalaxy.com">✉️ info@hopgalaxy.com</a>
+                    </div>
+                    <div class="cc">
+                        <h4>🏢 Hop Galaxy Barajas</h4>
+                        <p>Calle Campezo, 3 (Local 6)</p>
+                        <p>San Blas-Canillejas · Madrid 28022</p>
+                        <a href="tel:666068596">📞 666 06 85 96</a>
+                        <a href="mailto:barajas@hopgalaxy.com">✉️ barajas@hopgalaxy.com</a>
+                    </div>
+                    <div class="cc">
+                        <h4>📱 Síguenos</h4>
+                        <div class="social-row" style="margin-top:0.5rem;">
+                            <a class="social-btn ig-btn" href="https://www.instagram.com/hopgalaxyboadilla/"
+                                target="_blank">Boadilla 📷</a>
+                            <a class="social-btn ig-btn" href="https://www.instagram.com/hopgalaxybarajas/"
+                                target="_blank">Barajas 📷</a>
+                        </div>
+                        <div style="margin-top:0.7rem;">
+                            <a class="social-btn tt-btn" href="https://www.tiktok.com/@hopgalaxy" target="_blank">🎵
+                                TikTok @hopgalaxy</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ -->
+    <div id="page-faq" class="page">
+        <div class="faq-wrap">
+            <div class="section-tag">❓ Dudas frecuentes</div>
+            <h2>Preguntas frecuentes</h2>
+            <p>Resolvemos tus dudas más habituales.</p>
+
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">¿Es necesario reservar con antelación? <span
+                        class="faq-arrow">▼</span></div>
+                <div class="faq-a">Para juego libre puedes venir directamente, aunque recomendamos reservar en fines de
+                    semana y festivos. Para cumpleaños, excursiones y fiestas privadas sí es obligatorio reservar con
+                    antelación.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">¿Se necesitan calcetines especiales? <span
+                        class="faq-arrow">▼</span></div>
+                <div class="faq-a">Sí, es obligatorio usar calcetines antideslizantes específicos de trampolín por
+                    seguridad. Los puedes comprar en recepción si no los traes.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">¿Hay límite de edad o peso? <span
+                        class="faq-arrow">▼</span></div>
+                <div class="faq-a">Los bebés menores de 2 años pueden acceder gratis acompañados de un adulto. No hay
+                    límite de peso, aunque algunas atracciones pueden tener restricciones específicas por seguridad.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">¿Puedo traer comida o bebida? <span
+                        class="faq-arrow">▼</span></div>
+                <div class="faq-a">No se permite traer comida o bebida del exterior. Contamos con zona de cafetería y
+                    vending para tu comodidad.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">¿Cómo organizo un cumpleaños? <span
+                        class="faq-arrow">▼</span></div>
+                <div class="faq-a">Contacta con nosotros por teléfono o email y te explicamos los packs disponibles.
+                    Necesitamos reservar la fecha con al menos una semana de antelación y confirmar el número de
+                    invitados.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">¿Qué pasa si llego tarde a mi reserva? <span
+                        class="faq-arrow">▼</span></div>
+                <div class="faq-a">Si llegas tarde, el tiempo no se recupera. Te recomendamos llegar 15 minutos antes
+                    para registrarte y prepararte.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">¿Hay parking disponible? <span class="faq-arrow">▼</span>
+                </div>
+                <div class="faq-a">En Boadilla puedes usar el parking del Centro Comercial El Palacio. En Barajas hay
+                    parking disponible en la zona de Calle Campezo.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- REGISTRO -->
+    <div id="page-registro" class="page">
+        <div class="reg-box">
+            <h2>Crear cuenta</h2>
+            <p>Regístrate para gestionar tus reservas y acceder a ofertas exclusivas</p>
+            <div class="reg-grid">
+                <div class="form-group"><label>Nombre</label><input type="text" placeholder="Nombre"></div>
+                <div class="form-group"><label>Apellidos</label><input type="text" placeholder="Apellidos"></div>
+                <div class="form-group col-span"><label>Email</label><input type="email" placeholder="tu@email.com">
+                </div>
+                <div class="form-group"><label>Teléfono</label><input type="tel" placeholder="6XX XXX XXX"></div>
+                <div class="form-group"><label>Fecha nacimiento</label><input type="date"></div>
+                <div class="form-group col-span"><label>Contraseña</label><input type="password" placeholder="••••••••">
+                </div>
+                <div class="form-group col-span"><label>Centro favorito</label>
+                    <select>
+                        <option>Barajas</option>
+                        <option>Boadilla del Monte</option>
+                    </select>
+                </div>
+            </div>
+            <div style="margin:1.2rem 0; font-size:0.82rem; color:var(--muted); line-height:1.6;">
+                Al registrarte aceptas nuestros <a href="#" style="color:var(--accent);">términos y condiciones</a> y la
+                <a href="#" style="color:var(--accent);">política de privacidad</a>.
+            </div>
+            <button class="btn-submit" onclick="toast('¡Cuenta creada! Bienvenido a Hop Galaxy 🚀')">CREAR
+                CUENTA</button>
+        </div>
+    </div>
+
+    <!-- CENTRO PAGES (Barajas / Boadilla) -->
+    <div id="page-barajas" class="page">
+        <div class="contact-wrap">
+            <div class="section-tag">📍 Barajas · San Blas</div>
+            <h2>Hop Galaxy Barajas</h2>
+            <p style="color:var(--muted); margin-bottom:2rem;">Calle Campezo, 3 (Local 6) · 28022 San Blas-Canillejas,
+                Madrid</p>
+            <div class="centros-grid" style="margin-top:0; grid-template-columns: repeat(auto-fit,minmax(200px,1fr));">
+                <div class="service-card svc-cumple" onclick="toast('Contáctanos para reservar tu cumpleaños 🎂')">
+                    <div class="service-img">🎂</div>
+                    <div class="service-body">
+                        <h3>Cumpleaños</h3>
+                        <p>Paquetes personalizados para celebrar tu día especial con trampolines.</p><a
+                            class="service-link">Consultar →</a>
+                    </div>
+                </div>
+                <div class="service-card svc-excursiones"
+                    onclick="toast('Excursiones escolares y grupos organizados 🎒')">
+                    <div class="service-img">🎒</div>
+                    <div class="service-body">
+                        <h3>Excursiones</h3>
+                        <p>Grupos escolares y organizados con monitor incluido.</p><a class="service-link">Consultar
+                            →</a>
+                    </div>
+                </div>
+                <div class="service-card svc-fiesta" onclick="toast('Alquila el parque entero para tu evento 🎉')">
+                    <div class="service-img">🎉</div>
+                    <div class="service-body">
+                        <h3>Fiestas privadas</h3>
+                        <p>Alquila el parque completo para tu evento único.</p><a class="service-link">Consultar →</a>
+                    </div>
+                </div>
+                <div class="service-card svc-libre" onclick="show('tarifas')">
+                    <div class="service-img">🏟️</div>
+                    <div class="service-body">
+                        <h3>Instalaciones</h3>
+                        <p>Amplias zonas de trampolines, foam pit y mucho más.</p><a class="service-link">Ver tarifas
+                            →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="page-boadilla" class="page">
+        <div class="contact-wrap">
+            <div class="section-tag">📍 Boadilla del Monte</div>
+            <h2>Hop Galaxy Boadilla</h2>
+            <p style="color:var(--muted); margin-bottom:2rem;">Crta. de Majadahonda, 50, 1ª planta · C.C. El Palacio ·
+                28660 Boadilla del Monte</p>
+            <div class="centros-grid" style="margin-top:0; grid-template-columns: repeat(auto-fit,minmax(200px,1fr));">
+                <div class="service-card svc-cumple" onclick="toast('Contáctanos para tu cumpleaños en Boadilla 🎂')">
+                    <div class="service-img">🎂</div>
+                    <div class="service-body">
+                        <h3>Cumpleaños</h3>
+                        <p>Celebraciones especiales en nuestro centro de Boadilla.</p><a class="service-link">Consultar
+                            →</a>
+                    </div>
+                </div>
+                <div class="service-card svc-excursiones" onclick="toast('Excursiones para grupos en Boadilla 🎒')">
+                    <div class="service-img">🎒</div>
+                    <div class="service-body">
+                        <h3>Excursiones</h3>
+                        <p>Diversión en grupo para colegios y campamentos.</p><a class="service-link">Consultar →</a>
+                    </div>
+                </div>
+                <div class="service-card svc-fiesta" onclick="toast('Reserva el parque entero en Boadilla 🎉')">
+                    <div class="service-img">🎉</div>
+                    <div class="service-body">
+                        <h3>Fiestas privadas</h3>
+                        <p>El parque para ti y tus invitados.</p><a class="service-link">Consultar →</a>
+                    </div>
+                </div>
+                <div class="service-card svc-libre" onclick="show('tarifas')">
+                    <div class="service-img">🏟️</div>
+                    <div class="service-body">
+                        <h3>Instalaciones</h3>
+                        <p>Trampolines, zonas de foam y mucho más dentro del C.C.</p><a class="service-link">Ver tarifas
+                            →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="logo-text">Hop Galaxy</div>
+                <p>El Trampoline Park donde puede jugar toda la familia. Dos centros en Madrid: Barajas y Boadilla del
+                    Monte.</p>
+                <div class="social-row" style="margin-top:1rem;">
+                    <a class="social-btn ig-btn" href="https://www.instagram.com/hopgalaxyboadilla/"
+                        target="_blank">📷</a>
+                    <a class="social-btn ig-btn" href="https://www.instagram.com/hopgalaxybarajas/"
+                        target="_blank">📷</a>
+                    <a class="social-btn tt-btn" href="https://www.tiktok.com/@hopgalaxy" target="_blank">🎵</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Centros</h4>
+                <a onclick="show('barajas')">Hop Galaxy Barajas</a>
+                <a onclick="show('boadilla')">Hop Galaxy Boadilla</a>
+                <a onclick="show('tarifas')">Tarifas</a>
+                <a onclick="show('registro')">Registro</a>
+            </div>
+            <div class="footer-col">
+                <h4>Información</h4>
+                <a onclick="show('contacto')">Contacto</a>
+                <a onclick="show('faq')">Preguntas frecuentes</a>
+                <a href="#">Política de privacidad</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            2022 © Hop Galaxy · <a href="#">Política de privacidad</a>
+        </div>
+    </footer>
+
+    <div id="toast"></div>
+
+    <script>
+        function show(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            const el = document.getElementById('page-' + page);
+            if (el) { el.classList.add('active'); window.scrollTo(0, 0); }
+            // close mobile menu
+            document.getElementById('navMenu').classList.remove('open');
+        }
+
+        function toast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 3000);
+        }
+
+        function toggleMenu() {
+            document.getElementById('navMenu').classList.toggle('open');
+        }
+
+        function toggleFaq(el) {
+            const answer = el.nextElementSibling;
+            const isOpen = answer.classList.contains('open');
+            document.querySelectorAll('.faq-q').forEach(q => { q.classList.remove('open'); q.nextElementSibling.classList.remove('open'); });
+            if (!isOpen) { el.classList.add('open'); answer.classList.add('open'); }
+        }
+
+        function filterTarifas(type) {
+            document.querySelectorAll('.ttab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            document.querySelectorAll('.tarifa-card').forEach(c => {
+                c.style.display = c.dataset.type === type ? 'block' : 'none';
+            });
+        }
+
+        // show only juego libre by default
+        filterTarifas('juego');
+    </script>
+</body>
+
+</html>

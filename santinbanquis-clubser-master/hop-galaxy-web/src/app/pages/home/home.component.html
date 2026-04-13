@@ -1,0 +1,143 @@
+<div class="hero">
+    <video #heroVideo autoplay muted loop playsinline class="hero-video">
+        <source src="assets/Video_parque.mp4" type="video/mp4">
+    </video>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <div class="hero-tag"
+            style="display: inline-block; background: rgba(255, 112, 67, 0.2); color: #fff; padding: 6px 16px; border-radius: 50px; font-weight: 700; font-size: 0.85rem; letter-spacing: 1px; margin-bottom: 24px; backdrop-filter: blur(4px);">
+            TRAMPOLINE PARK · MADRID</div>
+        <h1>
+            <span class="line1"
+                style="display: block; font-size: 1.5rem; color: rgba(255,255,255,0.8); font-weight: 600; margin-bottom: 8px;">BIENVENIDOS
+                A</span>
+            <span class="line2 highlight"
+                style="display: block; font-size: 4rem; color: #fff; line-height: 1.1; text-shadow: 0 4px 20px rgba(0,0,0,0.3);">Saltimbanquis
+                club</span>
+        </h1>
+        <p class="hero-sub" style="color: rgba(255,255,255,0.9); text-shadow: 0 2px 10px rgba(0,0,0,0.2);">El Trampoline
+            Park donde puede disfrutar toda la familia. Ven a saltar y vivir una experiencia única.</p>
+        <div class="hero-btns">
+            <button class="btn-hero-primary" (click)="onReservaClick()">RESERVAR AHORA</button>
+            <a class="btn-hero-secondary" routerLink="/tarifas"
+                style="display: inline-flex; align-items: center; justify-content: center; color: #fff; border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); backdrop-filter: blur(4px);">VER
+                TARIFAS</a>
+        </div>
+    </div>
+</div>
+
+<!-- Servicios -->
+<div class="section container">
+    <div class="section-header">
+        <div
+            style="font-weight: 700; color: var(--secondary); letter-spacing: 1px; text-transform: uppercase; font-size: 0.85rem; margin-bottom: 8px;">
+            Nuestros Servicios</div>
+        <h2>¿Qué puedes hacer en Saltimbanquis club?</h2>
+        <p>Diversión sin límites para todas las edades</p>
+    </div>
+    <div class="services-grid">
+        <div class="service-card" routerLink="/barajas" style="cursor: pointer;">
+            <div class="service-img" style="background-color: rgba(92, 107, 192, 0.06); padding: 0; overflow: hidden;">
+                <img src="assets/servicio_excursiones.png" alt="Excursiones"
+                    style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <div class="service-body">
+                <h3>Excursiones</h3>
+                <p>Perfectas para colegios, campamentos y grupos organizados que buscan una actividad diferente.</p>
+                <div style="color: var(--primary); font-weight: 700; font-size: 0.9rem; margin-top: 16px;">Más
+                    información →</div>
+            </div>
+        </div>
+        <div class="service-card" routerLink="/tarifas" style="cursor: pointer;">
+            <div class="service-img" style="background-color: rgba(46, 204, 113, 0.06); padding: 0; overflow: hidden;">
+                <img src="assets/servicio_juego_libre.png" alt="Juego libre"
+                    style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <div class="service-body">
+                <h3>Juego libre</h3>
+                <p>Acceso libre a todas las zonas de trampolines y atracciones del parque. ¡Salta sin parar!</p>
+                <div style="color: var(--primary); font-weight: 700; font-size: 0.9rem; margin-top: 16px;">Ver tarifas →
+                </div>
+            </div>
+        </div>
+        <div class="service-card" routerLink="/barajas" style="cursor: pointer;">
+            <div class="service-img" style="background-color: rgba(255, 112, 67, 0.06); padding: 0; overflow: hidden;">
+                <img src="assets/servicio_cumpleanos.png" alt="Cumpleaños"
+                    style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <div class="service-body">
+                <h3>Cumpleaños</h3>
+                <p>Celebra un cumpleaños inolvidable con nuestros paquetes especiales para grupos.</p>
+                <div style="color: var(--primary); font-weight: 700; font-size: 0.9rem; margin-top: 16px;">Celebrar
+                    cumpleaños →</div>
+            </div>
+        </div>
+        <div class="service-card" routerLink="/barajas" style="cursor: pointer;">
+            <div class="service-img" style="background-color: rgba(241, 196, 15, 0.06); padding: 0; overflow: hidden;">
+                <img src="assets/servicio_fiesta_privada.png" alt="Fiestas privadas"
+                    style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <div class="service-body">
+                <h3>Fiestas privadas</h3>
+                <p>Alquila el espacio completo para tu evento especial o corporativo con total exclusividad.</p>
+                <div style="color: var(--primary); font-weight: 700; font-size: 0.9rem; margin-top: 16px;">Solicitar
+                    presupuesto →</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Centros -->
+<div
+    style="background-color: #FAFAFA; padding: 5rem 0; border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light);">
+    <div class="container">
+        <div class="section-header">
+            <div
+                style="font-weight: 700; color: var(--secondary); letter-spacing: 1px; text-transform: uppercase; font-size: 0.85rem; margin-bottom: 8px;">
+                Nuestras Instalaciones</div>
+            <h2>Nuestros centros</h2>
+            <p>Encuentra tu Saltimbanquis club más cercano</p>
+        </div>
+        <div class="centros-grid">
+            <div *ngFor="let c of centros" class="centro-card" [routerLink]="['/centro', c._id || c.id]" style="cursor: pointer; position: relative;">
+                <div
+                    style="position: absolute; top: 0; left: 0; width: 100%; height: 4px; background-color: var(--secondary); border-radius: var(--radius-lg) var(--radius-lg) 0 0;">
+                </div>
+                <div *ngIf="c.nombre"
+                    style="display: inline-block; padding: 4px 12px; background: rgba(92, 107, 192, 0.1); color: var(--secondary); font-size: 0.75rem; font-weight: 700; border-radius: 50px; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px;">
+                    {{ c.nombre.replace('Saltimbanquis club ', '') }}</div>
+                <h3>{{ c.nombre }}</h3>
+                <p class="address">{{ c.ubicacion }}</p>
+
+                <div style="margin: 24px 0; padding-top: 16px; border-top: 1px solid var(--border-light);">
+                    <div *ngIf="c.telefono"
+                        style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px; color: var(--text-main);">
+                        <span
+                            style="display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: var(--border-light); border-radius: 6px; font-size: 0.8rem;">📞</span>
+                        <span style="font-weight: 600;">{{ c.telefono }}</span>
+                    </div>
+                    <div *ngIf="c.email"
+                        style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px; color: var(--text-main);">
+                        <span
+                            style="display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: var(--border-light); border-radius: 6px; font-size: 0.8rem;">✉️</span>
+                        <span>{{ c.email }}</span>
+                    </div>
+                </div>
+
+                <div *ngIf="c.descripcion"
+                    style="background-color: rgba(241, 196, 15, 0.1); color: #B7950B; padding: 12px 16px; border-radius: var(--radius-sm); font-size: 0.85rem; font-weight: 600; margin-bottom: 20px;">
+                    {{ c.descripcion }}
+                </div>
+
+                <div style="display: flex; gap: 12px;" (click)="$event.stopPropagation()">
+                    <a *ngIf="c.nombre.includes('Boadilla')" href="https://www.instagram.com/saltimbanquisclubboadilla/" target="_blank"
+                        style="padding: 8px 16px; background: var(--border-light); border-radius: 50px; font-size: 0.85rem; font-weight: 600; color: var(--text-main);">Instagram</a>
+                    <a *ngIf="c.nombre.includes('Barajas')" href="https://www.instagram.com/saltimbanquisclubbarajas/" target="_blank"
+                        style="padding: 8px 16px; background: var(--border-light); border-radius: 50px; font-size: 0.85rem; font-weight: 600; color: var(--text-main);">Instagram</a>
+                    <a href="https://www.tiktok.com/@saltimbanquisclub" target="_blank"
+                        style="padding: 8px 16px; background: var(--border-light); border-radius: 50px; font-size: 0.85rem; font-weight: 600; color: var(--text-main);">TikTok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

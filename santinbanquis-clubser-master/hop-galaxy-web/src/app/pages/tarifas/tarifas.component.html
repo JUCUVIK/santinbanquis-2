@@ -1,0 +1,30 @@
+<div class="tarifas-wrap">
+    <div class="tarifas-header">
+        <div class="section-tag">💰 Precios</div>
+        <h2>Tarifas</h2>
+        <p>Precios para todos. Sin sorpresas.</p>
+    </div>
+    <div class="tarifa-tabs">
+        <button class="ttab" [class.active]="activeTab === 'juego'" (click)="setTab('juego')">Juego libre</button>
+        <button class="ttab" [class.active]="activeTab === 'cumple'" (click)="setTab('cumple')">Cumpleaños</button>
+        <button class="ttab" [class.active]="activeTab === 'excursion'"
+            (click)="setTab('excursion')">Excursiones</button>
+    </div>
+    <div class="tarifa-grid">
+        @for (tarifa of tarifasFiltradas; track tarifa.id) {
+        <div class="tarifa-card" [class.featured]="tarifa.destacado">
+            @if (tarifa.destacado) {
+            <div class="featured-tag">{{ tarifa.etiquetaDestacado }}</div>
+            }
+            <div class="tarifa-icon"><img [src]="tarifa.imagenUrl" [alt]="tarifa.nombre"
+                    style="width: 160px; height: 160px; object-fit: cover; border-radius: 50%; margin: 0 auto;"></div>
+            <div class="tarifa-name">{{ tarifa.nombre }}</div>
+            <div class="tarifa-who">{{ tarifa.subtitulo }}</div>
+            <div class="tarifa-price" *ngIf="tarifa.precio === 0">Gratis<span></span></div>
+            <div class="tarifa-price" *ngIf="tarifa.precio > 0">{{ tarifa.precio }}<span>{{ tarifa.sufijoPrecio }}</span></div>
+            <div class="tarifa-note" style="margin-bottom: 1rem;">{{ tarifa.nota }}</div>
+            <button class="btn-submit" style="margin-top: auto; padding: 0.8rem; font-size: 0.9rem;" (click)="reservar(tarifa)">RESERVAR</button>
+        </div>
+        }
+    </div>
+</div>

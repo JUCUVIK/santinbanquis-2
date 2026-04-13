@@ -1,0 +1,45 @@
+<div class="faq-wrap" style="max-width: 800px;">
+    <div class="section-tag">📝 Obligatorio</div>
+    <h2>Consentimiento Informado</h2>
+    <p>Por motivos de seguridad y cobertura de seguros, todo participante debe firmar este documento antes de entrar a la zona de salto.</p>
+
+    <div class="reg-box" style="margin-top: 2rem;">
+        <h3 style="font-family: 'Baloo 2', cursive; margin-bottom: 1.5rem; color: var(--primary);">Descargo de Responsabilidad</h3>
+        
+        <div style="background: var(--surface); padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem; max-height: 250px; overflow-y: auto; font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; border: 1px solid var(--border);">
+            <p style="margin-bottom: 0.8rem;">Declaro entender que el uso de los trampolines y otras instalaciones en Saltimbanquis club conlleva riesgos inherentes que pueden resultar en lesiones, incluyendo pero no limitándose a cortes, rasguños, esguinces, fracturas de huesos, e incluso lesiones más graves.</p>
+            <p style="margin-bottom: 0.8rem;">Por la presente asumo voluntariamente todos los riesgos asociados con la participación en estas actividades.</p>
+            <p style="margin-bottom: 0.8rem;">Me comprometo a seguir en todo momento las instrucciones del personal, así como las normas de seguridad publicadas y expuestas por todo el parque.</p>
+            <p style="margin-bottom: 0.8rem;">Eximo de toda responsabilidad a Saltimbanquis club S.L., sus directores, empleados y agentes ante cualquier reclamo por lesiones, daños a la propiedad o cualquier otra pérdida que pueda surgir de o estar relacionada con el uso de las instalaciones.</p>
+            <p>He leído y entiendo completamente el contenido de este descargo de responsabilidad y lo firmo por mi propia voluntad.</p>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+            <label>Nombre completo del firmante (Padre/Madre/Tutor si es menor)</label>
+            <input type="text" placeholder="Tu nombre completo" [(ngModel)]="nombreFirmante">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+            <label>Nombres de los participantes bajo este consentimiento</label>
+            <textarea placeholder="Ej. Juan Pérez, María Pérez" [(ngModel)]="nombresParticipantes"></textarea>
+            <span style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.3rem;">Separados por comas</span>
+        </div>
+
+        <div style="background: var(--bg); padding: 1rem; border-radius: 8px; border: 1px dashed var(--text-muted); margin-bottom: 1.5rem; text-align: center;">
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.5rem;">Firma digital requerida</p>
+            <div style="background: white; border: 1px solid #eee; border-radius: 4px; overflow: hidden; height: 150px; width: 100%;">
+                <canvas #signatureCanvas style="display: block; width: 100%; height: 100%; touch-action: none;"></canvas>
+            </div>
+            <button style="border: none; background: transparent; color: var(--primary); font-size: 0.75rem; font-weight: bold; cursor: pointer; text-decoration: underline; margin-top: 0.5rem;" (click)="clearSignature()">Limpiar firma</button>
+        </div>
+
+        <div style="margin:1.2rem 0; font-size:0.82rem; color:var(--text-main); line-height:1.6; font-weight: 600;">
+            <input type="checkbox" id="accept" style="margin-right: 0.5rem;" [(ngModel)]="aceptado">
+            <label for="accept">Confirmo que he leído y acepto el consentimiento informado.</label>
+        </div>
+        
+        <button class="btn-submit" style="width: 100%; margin-top: 1rem;" (click)="onSubmit()">CONTINUAR AL PAGO</button>
+    </div>
+</div>
+
+

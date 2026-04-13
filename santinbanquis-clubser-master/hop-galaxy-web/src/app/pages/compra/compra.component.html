@@ -1,0 +1,55 @@
+<div class="faq-wrap" style="max-width: 900px;" *ngIf="reserva">
+    <div class="section-tag">Checkout</div>
+    <h2>Compra y Pago</h2>
+
+    <div class="contact-grid" style="margin-top: 2rem; align-items: start;">
+        <div class="reg-box checkout-box" style="width: 100%; margin: 0;">
+            <h3 style="font-family: 'Baloo 2', cursive; margin-bottom: 1.5rem; color: var(--primary);">Detalles de la reserva</h3>
+
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem;">
+                <span style="color: var(--text-muted);">Centro</span>
+                <span style="font-weight: bold;">{{ centroNombre }}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem;">
+                <span style="color: var(--text-muted);">Fecha y Hora</span>
+                <span style="font-weight: bold;">{{ reserva.fecha }}, {{ reserva.hora }}</span>
+            </div>
+            <div style="border-top: 1px solid var(--border); margin: 1rem 0; padding-top: 1rem;">
+                <div *ngFor="let entrada of reserva.entradas" style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span>{{ entrada.cantidad }} x {{ entrada.tipo }}</span>
+                    <span>{{ entrada.precio * entrada.cantidad | number:'1.2-2' }} €</span>
+                </div>
+            </div>
+            <div style="border-top: 2px dashed var(--border); margin: 1rem 0; padding-top: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-weight: bold; font-size: 1.2rem;">TOTAL</span>
+                <span style="font-family: 'Baloo 2', cursive; font-size: 1.8rem; color: var(--primary); font-weight: 800;">{{ reserva.total | number:'1.2-2' }} €</span>
+            </div>
+
+            <div class="aviso" style="margin-top: 2rem;">⚠️ Te recordamos que todos los participantes deben tener un consentimiento firmado para acceder.</div>
+        </div>
+
+        <div class="reg-box checkout-box" style="width: 100%; margin: 0;">
+            <h3 style="font-family: 'Baloo 2', cursive; margin-bottom: 1.5rem; color: var(--primary);">Método de Pago</h3>
+
+            <div style="background: var(--surface); padding: 1.5rem; border-radius: 12px; border: 2px solid var(--primary); margin-bottom: 1.5rem;">
+                <div style="font-weight: bold; margin-bottom: 0.5rem;">💳 Tarjeta de Crédito / Débito</div>
+                <p style="font-size: 0.85rem; color: var(--text-muted);">Pagos seguros mediante la pasarela de Redsys. En el siguiente paso se le redirigirá de forma segura al banco.</p>
+            </div>
+
+            <div style="margin:1.2rem 0; font-size:0.82rem; color:var(--text-muted); line-height:1.6;">
+                <input type="checkbox" id="terms" style="margin-right: 0.5rem;" checked>
+                <label for="terms">He leído y acepto los <a routerLink="/aviso-legal" style="color:var(--primary);">términos y condiciones de compra</a>.</label>
+            </div>
+
+            <button class="btn-submit" style="width: 100%; display: flex; justify-content: center; gap: 0.5rem;" (click)="onPay()">
+                <span>PAGAR</span>
+                <span>{{ reserva.total | number:'1.2-2' }} €</span>
+            </button>
+            <div style="text-align: center; margin-top: 1rem;">
+               <a routerLink="/reserva" style="color: var(--text-muted); font-size: 0.85rem; text-decoration: none;">← Volver atrás</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
